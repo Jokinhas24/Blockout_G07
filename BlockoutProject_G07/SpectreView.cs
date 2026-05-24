@@ -123,5 +123,14 @@ namespace BlockoutProject_G07
 
             return (row, column);
         }
+        public void ShowDifficultyMenu()
+        {
+            Console.WriteLine("Choose one:\n");
+            Console.WriteLine("Press '1' for Easy;");
+            Console.WriteLine("Press '2' for Medium;");
+            Console.WriteLine("Press '3' for Hard.\n");
+            Console.Write("Your option: ");
+        }
+        
     }
 }

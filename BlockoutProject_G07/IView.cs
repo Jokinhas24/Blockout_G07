@@ -17,5 +17,6 @@ namespace BlockoutProject_G07
         void ShowBoard(Board board);
         void ShowGameMenu();
         (int, int) AskCoordinates();
+        void ShowDifficultyMenu();
     }
 }

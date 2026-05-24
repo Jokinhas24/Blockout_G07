@@ -96,7 +96,7 @@ namespace BlockoutProject_G07
                             (row, column) = view.AskCoordinates();
                             if (!board.IsValidCoord(row, column))
                             {
-                                view.ErrorMessage("Invalid Coordinate");
+                                view.ErrorMessage("Invalid Coordinate!");
                             }
                         } while (!board.IsValidCoord(row, column));
                         break;
@@ -119,6 +119,26 @@ namespace BlockoutProject_G07
         }
         public void ChangeDifficulty(IView view, Board board)
         {
+            view.ShowDifficultyMenu();
+            string option = view.Input();
+            switch (option)
+                {
+                    case "1":
+                        Program.difficulty = Difficulty.Easy;
+                        break;
+                    case "2":
+                        Program.difficulty = Difficulty.Medium;
+                        break;
+                    case "3":
+                        Program.difficulty = Difficulty.Hard;
+                        break;
+                    case "0":
+                        view.ExitMessage();
+                        break;
+                    default:
+                        view.ErrorMessage("Invalid Difficulty!");
+                        break;
+                }
             
         }
     }
