@@ -25,6 +25,9 @@ namespace BlockoutProject_G07
         /// <param name="view"> Current View </param>
         public void Run(IView view)
         {
+            // Greet user
+            view.WelcomeMessage();
+
             // We keep the user's option here
             string option;
 
@@ -125,15 +128,15 @@ namespace BlockoutProject_G07
                 {
                     case "1":
                         Program.difficulty = Difficulty.Easy;
+                        view.DifficultyMessage("Easy");
                         break;
                     case "2":
                         Program.difficulty = Difficulty.Medium;
+                        view.DifficultyMessage("Medium");
                         break;
                     case "3":
                         Program.difficulty = Difficulty.Hard;
-                        break;
-                    case "0":
-                        view.ExitMessage();
+                        view.DifficultyMessage("Hard");
                         break;
                     default:
                         view.ErrorMessage("Invalid Difficulty!");

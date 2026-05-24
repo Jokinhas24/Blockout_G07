@@ -18,5 +18,6 @@ namespace BlockoutProject_G07
         void ShowGameMenu();
         (int, int) AskCoordinates();
         void ShowDifficultyMenu();
+        void DifficultyMessage(string difficulty);
     }
 }

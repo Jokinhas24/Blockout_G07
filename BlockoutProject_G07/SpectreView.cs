@@ -106,30 +106,48 @@ namespace BlockoutProject_G07
                 }
             }
         }
+        /// <summary>
+        /// Shows the game menu
+        /// </summary>
         public void ShowGameMenu()
         {
-            Console.WriteLine("Choose one:\n");
+            Console.WriteLine("\nChoose one:\n");
             Console.WriteLine("Press '1' to Choose Coordinates;");
             Console.WriteLine("Press '2' to Read the Tutorial;");
             Console.WriteLine("Press '0' to Quit to Main Menu.\n");
             Console.Write("Your option: ");
         }
+        /// <summary>
+        /// Asks for coordinates
+        /// </summary>
+        /// <returns> User's coordinates </returns>
         public (int, int) AskCoordinates()
         {
-            Console.WriteLine("Choose a row:\n");
+            Console.WriteLine("\nChoose a row:");
             int row = int.Parse(Input());
-            Console.WriteLine("Choose a column:\n");
+            Console.WriteLine("\nChoose a column:\n");
             int column = int.Parse(Input());
 
             return (row, column);
         }
+        /// <summary>
+        /// Shows changing difficulty menu
+        /// </summary>
         public void ShowDifficultyMenu()
         {
-            Console.WriteLine("Choose one:\n");
+            Console.WriteLine("\nChoose one:\n");
             Console.WriteLine("Press '1' for Easy;");
             Console.WriteLine("Press '2' for Medium;");
             Console.WriteLine("Press '3' for Hard.\n");
             Console.Write("Your option: ");
+        }
+        /// <summary>
+        /// Shows which difficulty is being changed to
+        /// </summary>
+        /// <param name="difficulty"> New difficulty </param>
+        public void DifficultyMessage(string difficulty)
+        {
+            Console.WriteLine($"\nChanging difficulty to {difficulty}...");
         }
         
     }
