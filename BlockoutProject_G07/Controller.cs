@@ -10,6 +10,8 @@ namespace BlockoutProject_G07
     {
         // The board (part of the Model)
         private readonly Board board;
+        // stating the variable of the game state
+        private bool gameWon;
         /// <summary>
         /// Controller's constructor
         /// </summary>
@@ -65,7 +67,7 @@ namespace BlockoutProject_G07
                 }
 
                 // Loop keeps going until players choses to quit (option 0)
-            } while (option != "0");
+            } while (option != "1" && option != "0");
         }
         /// <summary>
         /// Game's main loop
@@ -75,8 +77,8 @@ namespace BlockoutProject_G07
         public void StartGame(IView view, Board board)
         {
             // Game's variables
+            gameWon = false;
             string option;
-            bool gameWon = false;
             int row, column;
 
             // Main game loop
@@ -86,7 +88,7 @@ namespace BlockoutProject_G07
                 view.ShowBoard(board);
 
                 // Shows game menu
-                view.ShowMenu();
+                view.ShowGameMenu();
                 option = view.Input();
 
                 // Determine the option specified by the user and act on it
@@ -114,11 +116,14 @@ namespace BlockoutProject_G07
                         break;
                 }
 
-                // Wait for user input
-                view.WaitUser();
+                // Wait for user to press a key...
+                if (option != "0")
+                {
+                    view.WaitUser();
+                }
 
                 // Loop keeps going game is won, or player decides to quit
-            } while (!gameWon && option== "0");
+            } while (!gameWon && option != "0");
         }
         public void ChangeDifficulty(IView view, Board board)
         {
@@ -144,5 +149,31 @@ namespace BlockoutProject_G07
                 }
             
         }
+        /// <summary>
+        /// Checks if the board is clear and changes game state to "Won" = true
+        /// </summary>
+        /// <param name="board"> Board to check </param>
+        public void CheckBoardWon(Board board)
+        {
+            //Number of tiles cleared
+            int n = 0;
+            //Checks all tiles and adds to tiles cleared
+            for (int i = 0; i < board.Size; i++)
+            {
+                for (int j = 0; j < board.Size; j++)
+                {
+                    if (!board.GetTile(i, j).GetState())
+                    {
+                        n++;
+                    }
+                }
+            }
+            //Changes game state "Won" to true when all Tiles are cleared
+            if (n == board.Size * board.Size)
+            {
+                gameWon = true;
+            }
+        }
+        
     }
 }
