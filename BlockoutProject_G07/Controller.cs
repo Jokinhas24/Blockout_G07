@@ -11,12 +11,12 @@ namespace BlockoutProject_G07
         // The board (part of the Model)
         private readonly Board board;
         /// <summary>
-        /// Controller of the Controller
+        /// Controller's constructor
         /// </summary>
         /// <param name="board"> Current Board </param>
         public Controller(Board board)
         {
-            // Keep the player list (part of the model)
+            // Keep the board (part of the model)
             this.board = board;
         }
         /// <summary>
@@ -65,31 +65,57 @@ namespace BlockoutProject_G07
             } while (option != "0");
         }
         /// <summary>
-        /// 
+        /// Game's main loop
         /// </summary>
-        /// <param name="view"></param>
+        /// <param name="view"> Current view </param>
+        /// <param name="board"> Current board </param>
         public void StartGame(IView view, Board board)
         {
-            // We keep the user's option here
+            // Game's variables
             string option;
+            bool gameWon = false;
+            int row, column;
 
             // Main game loop
             do
             {
-                // Show menu and get user option
+                // Show board before asking inputs
+                view.ShowBoard(board);
+
+                // Shows game menu
                 view.ShowMenu();
                 option = view.Input();
 
-
-
-                // Wait for user to press a key...  
-                if (option != "0")
+                // Determine the option specified by the user and act on it
+                switch (option)
                 {
-                    view.WaitUser();
+                    case "1":
+                        // Get user coordinates while not having valid coordinates
+                        do
+                        {
+                            (row, column) = view.AskCoordinates();
+                            if (!board.IsValidCoord(row, column))
+                            {
+                                view.ErrorMessage("Invalid Coordinate");
+                            }
+                        } while (!board.IsValidCoord(row, column));
+                        break;
+                    case "2":
+                        view.ShowTutorial();
+                        break;
+                    case "0":
+                        view.ExitMessage();
+                        break;
+                    default:
+                        view.ErrorMessage("Unknown option!");
+                        break;
                 }
 
-                // Loop keeps going until players choses to quit (option 0)
-            } while (option != "0");
+                // Wait for user input
+                view.WaitUser();
+
+                // Loop keeps going game is won, or player decides to quit
+            } while (!gameWon && option== "0");
         }
         public void ChangeDifficulty(IView view, Board board)
         {

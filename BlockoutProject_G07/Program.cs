@@ -11,7 +11,7 @@ namespace BlockoutProject_G07
         private static void Main()
         {
             // Create the Board
-            Board board = new Board(3);
+            Board board = new Board(Difficulty.Easy);
 
             // Instantiate View
             IView view = new SpectreView();

@@ -70,9 +70,58 @@ namespace BlockoutProject_G07
             Console.WriteLine("Turn all tiles OFF to win the game.");
             Console.WriteLine("\nGood Luck!");
         }
+    
         public void ShowBoard(Board board)
         {
-            
+            for (int i = 0; i < board.Size; i++)
+            {
+                for (int j = 0; j < board.Size; j++)
+                {
+                    if (j == board.Size - 1)
+                    {
+                        if (board.GetTile(i, j) == null)
+                        {
+                            Console.WriteLine("  ");
+                        }
+                        else
+                        {
+                            Console.WriteLine(board.GetTile(i, j).GetState());
+                        }
+                    }
+                    else
+                    {
+                        if (board.GetTile(i, j) == null)
+                        {
+                            Console.Write("  |");
+                        }
+                        else
+                        {
+                            Console.Write($"{board.GetTile(i, j).GetState()}|");
+                        }
+                    }
+                }
+                if (i < board.Size - 1)
+                {
+                    Console.WriteLine("-----------");
+                }
+            }
+        }
+        public void ShowGameMenu()
+        {
+            Console.WriteLine("Choose one:\n");
+            Console.WriteLine("Press '1' to Choose Coordinates;");
+            Console.WriteLine("Press '2' to Read the Tutorial;");
+            Console.WriteLine("Press '0' to Quit to Main Menu.\n");
+            Console.Write("Your option: ");
+        }
+        public (int, int) AskCoordinates()
+        {
+            Console.WriteLine("Choose a row:\n");
+            int row = int.Parse(Input());
+            Console.WriteLine("Choose a column:\n");
+            int column = int.Parse(Input());
+
+            return (row, column);
         }
     }
 }
