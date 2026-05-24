@@ -14,5 +14,6 @@ namespace BlockoutProject_G07
         void ErrorMessage(string message);
         void WaitUser();
         void ShowTutorial();
+        void ShowBoard(Board board);
     }
 }

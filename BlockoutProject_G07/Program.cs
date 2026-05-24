@@ -10,25 +10,17 @@ namespace BlockoutProject_G07
         /// <param name="args">Not used.</param>
         private static void Main()
         {
-            Console.WriteLine("Hello LP!");
-            // Initialize the player list with two players using collection
-            // initialization syntax
-            //PlayerList playerList = new PlayerList() {
-            //    new Player("Best player ever", 100),
-            //    new Player("An even better player", 500),
-            //    new Player("Freddy", 125),
-            //    new Player("Chica", 200),
-            //    new Player("Daniel", 150)
-            //};
+            // Create the Board
+            Board board = new Board(3);
 
-            // Intantiate View
+            // Instantiate View
             IView view = new SpectreView();
 
             // Instantiate Controller
-            //Controller controller = new Controller(playerList);
+            Controller controller = new Controller(board);
 
             // Start the program instance
-            //controller.Run(view);
+            controller.Run(view);
         }
         
     }
