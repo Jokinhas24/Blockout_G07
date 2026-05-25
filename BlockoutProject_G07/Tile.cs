@@ -8,7 +8,7 @@ namespace BlockoutProject_G07
     public class Tile
     {
         //Defining Tile state (ON or OFF)
-        public bool State {get;}
+        public bool State {get; private set;}
         /// <summary>
         /// Tile's constructor
         /// </summary>
@@ -24,6 +24,13 @@ namespace BlockoutProject_G07
         public bool GetState()
         {
             return State;
+        }
+        /// <summary>
+        /// Toggles Tile's state (ON to OFF or OFF to ON)
+        /// </summary>
+        public void ToggleState()
+        {
+            State = !State;
         }
     }
 }

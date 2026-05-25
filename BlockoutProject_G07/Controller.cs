@@ -37,22 +37,21 @@ namespace BlockoutProject_G07
             do
             {
                 // Show menu and get user option
-                view.ShowMenu();
-                option = view.Input();
+                option = view.ShowMenu();
 
                 // Determine the option specified by the user and act on it
                 switch (option)
                 {
-                    case "1":
+                    case "Play":
                         StartGame(view, board);
                         break;
-                    case "2":
+                    case "Difficulty":
                         ChangeDifficulty(view, board);
                         break;
-                    case "3":
+                    case "Tutorial":
                         view.ShowTutorial();
                         break;
-                    case "0":
+                    case "Quit":
                         view.ExitMessage();
                         break;
                     default:
@@ -61,13 +60,13 @@ namespace BlockoutProject_G07
                 }
 
                 // Wait for user to press a key...  
-                if (option != "0")
+                if (option != "Quit")
                 {
                     view.WaitUser();
                 }
 
-                // Loop keeps going until players choses to quit (option 0)
-            } while (option != "1" && option != "0");
+                // Loop keeps going until players choses to starts the game or quit
+            } while (option != "Play" && option != "Quit");
         }
         /// <summary>
         /// Game's main loop
@@ -79,7 +78,6 @@ namespace BlockoutProject_G07
             // Game's variables
             gameWon = false;
             string option;
-            int row, column;
 
             // Main game loop
             do
@@ -88,27 +86,21 @@ namespace BlockoutProject_G07
                 view.ShowBoard(board);
 
                 // Shows game menu
-                view.ShowGameMenu();
-                option = view.Input();
+                option = view.ShowGameMenu();
 
                 // Determine the option specified by the user and act on it
                 switch (option)
                 {
-                    case "1":
-                        // Get user coordinates while not having valid coordinates
-                        do
-                        {
-                            (row, column) = view.AskCoordinates();
-                            if (!board.IsValidCoord(row, column))
-                            {
-                                view.ErrorMessage("Invalid Coordinate!");
-                            }
-                        } while (!board.IsValidCoord(row, column));
+                    case "Coordinates":
+                        // Ask coordinates
+                        (int row, int column) coordinates = view.AskCoordinates(board);
+                        // Toggle tiles
+                        ToggleTiles(board, coordinates.Item1, coordinates.Item2);
                         break;
-                    case "2":
+                    case "Tutorial":
                         view.ShowTutorial();
                         break;
-                    case "0":
+                    case "Quit":
                         view.ExitMessage();
                         break;
                     default:
@@ -117,29 +109,28 @@ namespace BlockoutProject_G07
                 }
 
                 // Wait for user to press a key...
-                if (option != "0")
+                if (option != "Quit")
                 {
                     view.WaitUser();
                 }
 
                 // Loop keeps going game is won, or player decides to quit
-            } while (!gameWon && option != "0");
+            } while (!gameWon && option != "Quit");
         }
         public void ChangeDifficulty(IView view, Board board)
         {
-            view.ShowDifficultyMenu();
-            string option = view.Input();
+            string option = view.ShowDifficultyMenu();
             switch (option)
                 {
-                    case "1":
+                    case "Easy":
                         Program.difficulty = Difficulty.Easy;
                         view.DifficultyMessage("Easy");
                         break;
-                    case "2":
+                    case "Medium":
                         Program.difficulty = Difficulty.Medium;
                         view.DifficultyMessage("Medium");
                         break;
-                    case "3":
+                    case "Hard":
                         Program.difficulty = Difficulty.Hard;
                         view.DifficultyMessage("Hard");
                         break;
@@ -174,6 +165,21 @@ namespace BlockoutProject_G07
                 gameWon = true;
             }
         }
-        
+        public void ToggleTiles(Board board, int row, int column)
+        {
+            // Toggle the chosen tile
+            board.GetTile(row, column).ToggleState();
+            // Toggle adjacent tiles
+            for (int i = row - 1; i <= row + 1; i++)
+            {
+                for (int j = column - 1; j <= column + 1; j++)
+                {
+                    if (board.IsValidCoord(i, j))
+                    {
+                        board.GetTile(i, j).ToggleState();
+                    }
+                }
+            }
+        }
     }
 }

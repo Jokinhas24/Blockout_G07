@@ -8,16 +8,16 @@ namespace BlockoutProject_G07
     public interface IView
     {
         string Input();
-        void ShowMenu();
+        string ShowMenu();
         void WelcomeMessage();
         void ExitMessage();
         void ErrorMessage(string message);
         void WaitUser();
         void ShowTutorial();
         void ShowBoard(Board board);
-        void ShowGameMenu();
-        (int, int) AskCoordinates();
-        void ShowDifficultyMenu();
+        string ShowGameMenu();
+        (int, int) AskCoordinates(Board board);
+        string ShowDifficultyMenu();
         void DifficultyMessage(string difficulty);
     }
 }

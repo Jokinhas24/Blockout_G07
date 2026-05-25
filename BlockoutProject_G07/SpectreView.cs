@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Spectre.Console;
 
 namespace BlockoutProject_G07
 {
@@ -16,30 +17,35 @@ namespace BlockoutProject_G07
             return Console.ReadLine();
         }
         /// <summary>
-        /// Shows the main menu
+        /// Shows the main menu and returns option
         /// </summary>
-        public void ShowMenu()
+        /// <returns> User's chosen option </returns>
+        public string ShowMenu()
         {
-            Console.WriteLine("Choose one:\n");
-            Console.WriteLine("Press '1' to Start the Game;");
-            Console.WriteLine("Press '2' to Change Difficulty;");
-            Console.WriteLine("Press '3' to Read the Tutorial;");
-            Console.WriteLine("Press '0' to Quit.\n");
-            Console.Write("Your option: ");
+            // Title
+            AnsiConsole.MarkupLine("\n[blue]Main Menu[/]");
+            // Option menu
+            var option = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .Title("Choose one:")
+            .AddChoices("Play", "Difficulty", "Tutorial", "Quit"));
+            // Showing what was chosen
+            AnsiConsole.MarkupLine($"Loading [yellow]{option}[/]...");
+            return option;
         }
         /// <summary>
         /// Shows the welcome message
         /// </summary>
         public void WelcomeMessage()
         {
-            Console.WriteLine("\n>>>> Welcome to Jokinhas24's Blockout Game! <<<<\n");
+            AnsiConsole.MarkupLine("\n[blue]>>>> Welcome to Jokinhas24's Blockout Game! <<<<[/]\n");
         }
         /// <summary>
         /// Shows the exit message
         /// </summary>
         public void ExitMessage()
         {
-            Console.WriteLine("\nQuitting...");
+            AnsiConsole.MarkupLine("\n[red]Quitting...[/]");
         }
         /// <summary>
         /// Shows an error message
@@ -47,99 +53,106 @@ namespace BlockoutProject_G07
         /// <param name="message"> String describing what type of error it is </param>
         public void ErrorMessage(string message)
         {
-            Console.Error.WriteLine($"\n>>> {message} <<<\n");
+            AnsiConsole.MarkupLine($"\n[red]>>> {message} <<<[/]\n");
         }
         /// <summary>
         /// Waits for user to press a key
         /// </summary>
         public void WaitUser()
         {
-            Console.Write("\nPress any key to continue...");
+            AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
             Console.ReadKey(true);
-            Console.WriteLine("\n");
         }
         /// <summary>
         /// Shows the tutorial
         /// </summary>
         public void ShowTutorial()
         {
-            Console.WriteLine("\nLoading Tutorial...\n");
-            Console.WriteLine("To play Blockout choose a tile.");
-            Console.WriteLine("Then, the environment will react toggling all adjacent tiles.");
-            Console.WriteLine("Meaning: All turned OFF tiles will become ON and vice versa.");
-            Console.WriteLine("Turn all tiles OFF to win the game.");
-            Console.WriteLine("\nGood Luck!");
+            AnsiConsole.MarkupLine("\nTo play Blockout choose a tile.");
+            AnsiConsole.MarkupLine("\nThen, the environment will react toggling all adjacent tiles.");
+            AnsiConsole.MarkupLine("\nMeaning: All turned OFF tiles will become ON and vice versa.");
+            AnsiConsole.MarkupLine("\nTurn all tiles OFF to win the game.");
+            AnsiConsole.MarkupLine("\n[yellow]Good Luck![/]");
         }
     
         public void ShowBoard(Board board)
         {
-            for (int i = 0; i < board.Size; i++)
+            var table = new Table();
+            // Make columns
+            for(int i = 0; i < board.Size; i++)
             {
-                for (int j = 0; j < board.Size; j++)
-                {
-                    if (j == board.Size - 1)
-                    {
-                        if (board.GetTile(i, j) == null)
-                        {
-                            Console.WriteLine("  ");
-                        }
-                        else
-                        {
-                            Console.WriteLine(board.GetTile(i, j).GetState());
-                        }
-                    }
-                    else
-                    {
-                        if (board.GetTile(i, j) == null)
-                        {
-                            Console.Write("  |");
-                        }
-                        else
-                        {
-                            Console.Write($"{board.GetTile(i, j).GetState()}|");
-                        }
-                    }
-                }
-                if (i < board.Size - 1)
-                {
-                    Console.WriteLine("-----------");
-                }
+                table.AddColumn(i.ToString());
             }
+            // Make rows
+            for(int i = 0; i < board.Size; i++)
+            {
+                List<string> row = new();
+
+                for(int j = 0; j < board.Size; j++)
+                {
+                    row.Add(board.GetTile(i, j).GetState()
+                        ? "[green]X[/]"
+                        : "[red]O[/]");
+                }
+
+                table.AddRow(row.ToArray());
+            }
+            // Show Board
+            AnsiConsole.Write(table);
         }
         /// <summary>
         /// Shows the game menu
         /// </summary>
-        public void ShowGameMenu()
+        public string ShowGameMenu()
         {
-            Console.WriteLine("\nChoose one:\n");
-            Console.WriteLine("Press '1' to Choose Coordinates;");
-            Console.WriteLine("Press '2' to Read the Tutorial;");
-            Console.WriteLine("Press '0' to Quit to Main Menu.\n");
-            Console.Write("Your option: ");
+            // Title
+            AnsiConsole.MarkupLine("\n[blue]In-Game Menu[/]");
+            // Option menu
+            var option = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .Title("Choose one:")
+            .AddChoices("Coordinates", "Tutorial", "Quit"));
+            // Showing what was chosen
+            AnsiConsole.MarkupLine($"Loading [yellow]{option}[/]...");
+            return option;
         }
         /// <summary>
         /// Asks for coordinates
         /// </summary>
         /// <returns> User's coordinates </returns>
-        public (int, int) AskCoordinates()
+        public (int, int) AskCoordinates(Board board)
         {
-            Console.WriteLine("\nChoose a row:");
-            int row = int.Parse(Input());
-            Console.WriteLine("\nChoose a column:\n");
-            int column = int.Parse(Input());
+            // Variables
+            int row, column;
+            // Get user coordinates while not having valid coordinates
+            do
+            {
+                row = AnsiConsole.Ask<int>("Choose a Row:");
+                column = AnsiConsole.Ask<int>("Choose a Column:");
+                if (!board.IsValidCoord(row, column))
+                {
+                    ErrorMessage("Invalid Coordinate!");
+                }
+            } while (!board.IsValidCoord(row, column));
 
             return (row, column);
         }
         /// <summary>
-        /// Shows changing difficulty menu
+        /// Shows changing difficulty menu and returns new difficulty
         /// </summary>
-        public void ShowDifficultyMenu()
+        /// <returns> User's chosen difficulty </returns>
+        public string ShowDifficultyMenu()
         {
-            Console.WriteLine("\nChoose one:\n");
-            Console.WriteLine("Press '1' for Easy;");
-            Console.WriteLine("Press '2' for Medium;");
-            Console.WriteLine("Press '3' for Hard.\n");
-            Console.Write("Your option: ");
+            // Title
+            AnsiConsole.MarkupLine("\n[blue]Difficulty Menu[/]");
+            // Option menu
+            var difficulty = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .Title("Choose one:")
+            .AddChoices("Easy", "Medium", "Hard"));
+            // Showing what was chosen
+            AnsiConsole.MarkupLine( $"\nChanging difficulty to [yellow]{difficulty}[/]...");
+            return difficulty;
         }
         /// <summary>
         /// Shows which difficulty is being changed to
