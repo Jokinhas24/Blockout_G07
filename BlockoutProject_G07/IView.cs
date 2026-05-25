@@ -7,7 +7,6 @@ namespace BlockoutProject_G07
 {
     public interface IView
     {
-        string Input();
         string ShowMenu();
         void WelcomeMessage();
         void ExitMessage();
@@ -18,6 +17,5 @@ namespace BlockoutProject_G07
         string ShowGameMenu();
         (int, int) AskCoordinates(Board board);
         string ShowDifficultyMenu();
-        void DifficultyMessage(string difficulty);
     }
 }

@@ -9,14 +9,6 @@ namespace BlockoutProject_G07
     public class SpectreView : IView
     {
         /// <summary>
-        /// Asks for user input
-        /// </summary>
-        /// <returns> String written by user </returns>
-        public string Input()
-        {
-            return Console.ReadLine();
-        }
-        /// <summary>
         /// Shows the main menu and returns option
         /// </summary>
         /// <returns> User's chosen option </returns>
@@ -30,7 +22,7 @@ namespace BlockoutProject_G07
             .Title("Choose one:")
             .AddChoices("Play", "Difficulty", "Tutorial", "Quit"));
             // Showing what was chosen
-            AnsiConsole.MarkupLine($"Loading [yellow]{option}[/]...");
+            AnsiConsole.MarkupLine($"\nOption chosen: [yellow]{option}[/]");
             return option;
         }
         /// <summary>
@@ -60,7 +52,7 @@ namespace BlockoutProject_G07
         /// </summary>
         public void WaitUser()
         {
-            AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+            AnsiConsole.MarkupLine("\n[grey]Press any key to continue...[/]");
             Console.ReadKey(true);
         }
         /// <summary>
@@ -69,9 +61,9 @@ namespace BlockoutProject_G07
         public void ShowTutorial()
         {
             AnsiConsole.MarkupLine("\nTo play Blockout choose a tile.");
-            AnsiConsole.MarkupLine("\nThen, the environment will react toggling all adjacent tiles.");
-            AnsiConsole.MarkupLine("\nMeaning: All turned OFF tiles will become ON and vice versa.");
-            AnsiConsole.MarkupLine("\nTurn all tiles OFF to win the game.");
+            AnsiConsole.MarkupLine("Then, the environment will react toggling all adjacent tiles.");
+            AnsiConsole.MarkupLine("Meaning: All turned OFF tiles will become ON and vice versa.");
+            AnsiConsole.MarkupLine("Turn all tiles OFF to win the game.");
             AnsiConsole.MarkupLine("\n[yellow]Good Luck![/]");
         }
     
@@ -106,14 +98,14 @@ namespace BlockoutProject_G07
         public string ShowGameMenu()
         {
             // Title
-            AnsiConsole.MarkupLine("\n[blue]In-Game Menu[/]");
+            AnsiConsole.MarkupLine("\n[blue]In-Game Menu[/]\n");
             // Option menu
             var option = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
             .Title("Choose one:")
             .AddChoices("Coordinates", "Tutorial", "Quit"));
             // Showing what was chosen
-            AnsiConsole.MarkupLine($"Loading [yellow]{option}[/]...");
+            AnsiConsole.MarkupLine($"\nOption chosen: [yellow]{option}[/]");
             return option;
         }
         /// <summary>
@@ -144,24 +136,15 @@ namespace BlockoutProject_G07
         public string ShowDifficultyMenu()
         {
             // Title
-            AnsiConsole.MarkupLine("\n[blue]Difficulty Menu[/]");
+            AnsiConsole.MarkupLine("\n[blue]Difficulty Menu[/]\n");
             // Option menu
             var difficulty = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
             .Title("Choose one:")
             .AddChoices("Easy", "Medium", "Hard"));
             // Showing what was chosen
-            AnsiConsole.MarkupLine( $"\nChanging difficulty to [yellow]{difficulty}[/]...");
+            AnsiConsole.MarkupLine( $"\nOption chosen: [yellow]{difficulty}[/]");
             return difficulty;
         }
-        /// <summary>
-        /// Shows which difficulty is being changed to
-        /// </summary>
-        /// <param name="difficulty"> New difficulty </param>
-        public void DifficultyMessage(string difficulty)
-        {
-            Console.WriteLine($"\nChanging difficulty to {difficulty}...");
-        }
-        
     }
 }

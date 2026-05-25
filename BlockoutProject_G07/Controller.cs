@@ -60,7 +60,7 @@ namespace BlockoutProject_G07
                 }
 
                 // Wait for user to press a key...  
-                if (option != "Quit")
+                if (option != "Play" && option != "Quit")
                 {
                     view.WaitUser();
                 }
@@ -83,7 +83,7 @@ namespace BlockoutProject_G07
             do
             {
                 // Show board before asking inputs
-                view.ShowBoard(board);
+                // view.ShowBoard(board);
 
                 // Shows game menu
                 option = view.ShowGameMenu();
@@ -108,7 +108,7 @@ namespace BlockoutProject_G07
                         break;
                 }
 
-                // Wait for user to press a key...
+                // Wait for user to press a key...  
                 if (option != "Quit")
                 {
                     view.WaitUser();
@@ -124,15 +124,12 @@ namespace BlockoutProject_G07
                 {
                     case "Easy":
                         Program.difficulty = Difficulty.Easy;
-                        view.DifficultyMessage("Easy");
                         break;
                     case "Medium":
                         Program.difficulty = Difficulty.Medium;
-                        view.DifficultyMessage("Medium");
                         break;
                     case "Hard":
                         Program.difficulty = Difficulty.Hard;
-                        view.DifficultyMessage("Hard");
                         break;
                     default:
                         view.ErrorMessage("Invalid Difficulty!");
