@@ -143,13 +143,29 @@ namespace BlockoutProject_G07
         {
             // Title
             AnsiConsole.MarkupLine("\n[blue]Difficulty Menu[/]");
-            // Option menu
+            // Option menu, detailing what each option does
             var difficulty = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
             .Title("Choose one:")
-            .AddChoices("Easy", "Medium", "Hard"));
+            .AddChoices("Easy", "Medium", "Hard")
+            .UseConverter(choice =>
+                choice switch
+                {
+                    "Easy" => "[green]Easy (3x3 board)[/]",
+                    "Medium" => "[yellow]Medium (5x5 board)[/]",
+                    "Hard" => "[red]Hard (8x8 board)[/]",
+                    _ => choice
+                }
+            ));
+            // Defining default color
+            Color color = Color.White;
+            // Changing color acordandly with the difficulty
+            if (difficulty == "Easy") {color = Color.Green;}
+            else if (difficulty == "Medium") {color = Color.Yellow;}
+            else if (difficulty == "Hard") {color = Color.Red;}
+
             // Showing what was chosen
-            AnsiConsole.MarkupLine( $"\nOption chosen: [yellow]{difficulty}[/]");
+            AnsiConsole.MarkupLine( $"\nOption chosen: [{color}]{difficulty}[/]");
             return difficulty;
         }
         /// <summary>
