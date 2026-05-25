@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace BlockoutProject_G07
@@ -96,6 +98,9 @@ namespace BlockoutProject_G07
             gameWon = false;
             string option;
 
+            // Shuffles board before anything
+            ShuffleBoard();
+
             // Main game loop
             while (true)
             {
@@ -116,7 +121,6 @@ namespace BlockoutProject_G07
                 {
                     // Shows game menu
                     option = view.ShowGameMenu();
-                    Console.WriteLine(board.Size);
 
                     // Determine the option specified by the user and act on it
                     switch (option)
@@ -125,13 +129,13 @@ namespace BlockoutProject_G07
                             // Ask coordinates
                             (int row, int column) coordinates = view.AskCoordinates(board);
                             // Toggle tiles
-                            ToggleTiles(board, coordinates.Item1, coordinates.Item2);
+                            ToggleTiles(board, coordinates.row, coordinates.column);
                             break;
                         case "Tutorial":
                             view.ShowTutorial();
                             break;
+                            // Return to main menu with exit result to leave
                         case "Quit":
-                            view.ExitMessage();
                             return GameResult.Exit;
                         default:
                             view.ErrorMessage("Unknown option!");
@@ -198,21 +202,38 @@ namespace BlockoutProject_G07
         }
         public void ToggleTiles(Board board, int row, int column)
         {
-            // Toggle chosen and adjacent tiles
-            for (int i = row - 1; i <= row + 1; i++)
-            {
-                for (int j = column - 1; j <= column + 1; j++)
-                {
-                    if (board.IsValidCoord(i, j))
-                    {
-                        board.GetTile(i, j).ToggleState();
-                    }
-                }
-            }
+            // Toggle chosen
+            board.GetTile(row, column).ToggleState();
+            // Toggle adjacent tiles (if valid)
+            if (board.IsValidCoord(row - 1, column)) {board.GetTile(row - 1, column).ToggleState();}
+            if (board.IsValidCoord(row + 1, column)) {board.GetTile(row + 1, column).ToggleState();}
+            if (board.IsValidCoord(row, column - 1)) {board.GetTile(row, column - 1).ToggleState();}
+            if (board.IsValidCoord(row, column + 1)) {board.GetTile(row, column + 1).ToggleState();}
         }
         public void CreateBoard()
         {
             board = new Board(difficulty);
+        }
+        public void ShuffleBoard()
+        {
+            Random random = new Random();
+
+            // Variable of the amount of toggles
+            int count = 0;
+
+            while (count < board.Size)
+            {
+                // Get random coordinates
+                int row = random.Next(0, board.Size);
+                int column = random.Next(0, board.Size);
+
+                // Check if the tile is already toggled (already true)
+                if (!board.GetTile(row, column).GetState())
+                {
+                    board.GetTile(row, column).ToggleState();
+                    count++;
+                }
+            }
         }
     }
 }

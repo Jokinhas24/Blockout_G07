@@ -74,7 +74,7 @@ namespace BlockoutProject_G07
         {   
             //Space
             AnsiConsole.MarkupLine("");
-            
+
             // Make Board
             for(int i = 0; i < board.Size; i++)
             {
@@ -98,7 +98,7 @@ namespace BlockoutProject_G07
         public string ShowGameMenu()
         {
             // Title
-            AnsiConsole.MarkupLine("\n[blue]In-Game Menu[/]\n");
+            AnsiConsole.MarkupLine("\n[blue]In-Game Menu[/]");
             // Option menu
             var option = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
@@ -119,8 +119,14 @@ namespace BlockoutProject_G07
             // Get user coordinates while not having valid coordinates
             do
             {
-                row = AnsiConsole.Ask<int>("Choose a Row:");
-                column = AnsiConsole.Ask<int>("Choose a Column:");
+                // If row or column is wrong remind the board size
+                row = -1 + AnsiConsole.Prompt(
+                    new TextPrompt<int>($"Choose a Row:")
+                        .ValidationErrorMessage($"[orange]Must be a number between 1 and {board.Size}![/]"));
+                column = -1 + AnsiConsole.Prompt(
+                    new TextPrompt<int>($"Choose a Column:")
+                        .ValidationErrorMessage($"[orange]Must be a number between 1 and {board.Size}![/]"));
+                // Check if is a valid coordinate
                 if (!board.IsValidCoord(row, column))
                 {
                     ErrorMessage("Invalid Coordinate!");
@@ -136,7 +142,7 @@ namespace BlockoutProject_G07
         public string ShowDifficultyMenu()
         {
             // Title
-            AnsiConsole.MarkupLine("\n[blue]Difficulty Menu[/]\n");
+            AnsiConsole.MarkupLine("\n[blue]Difficulty Menu[/]");
             // Option menu
             var difficulty = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
