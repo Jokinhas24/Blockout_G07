@@ -30,7 +30,7 @@ namespace BlockoutProject_G07
         /// </summary>
         public void WelcomeMessage()
         {
-            AnsiConsole.MarkupLine("\n[blue]>>>> Welcome to Jokinhas24's Blockout Game! <<<<[/]\n");
+            AnsiConsole.MarkupLine("\n[blue]>>>> Welcome to Jokinhas24's Blockout Game! <<<<[/]");
         }
         /// <summary>
         /// Shows the exit message
@@ -66,31 +66,31 @@ namespace BlockoutProject_G07
             AnsiConsole.MarkupLine("Turn all tiles OFF to win the game.");
             AnsiConsole.MarkupLine("\n[yellow]Good Luck![/]");
         }
-    
+        /// <summary>
+        /// Shows board (per Line)
+        /// </summary>
+        /// <param name="board"> Current board to be shown </param>
         public void ShowBoard(Board board)
-        {
-            var table = new Table();
-            // Make columns
+        {   
+            //Space
+            AnsiConsole.MarkupLine("");
+            
+            // Make Board
             for(int i = 0; i < board.Size; i++)
             {
-                table.AddColumn(i.ToString());
-            }
-            // Make rows
-            for(int i = 0; i < board.Size; i++)
-            {
-                List<string> row = new();
+                // Make Rows
+                string line = " ";
 
                 for(int j = 0; j < board.Size; j++)
                 {
-                    row.Add(board.GetTile(i, j).GetState()
-                        ? "[green]X[/]"
-                        : "[red]O[/]");
+                    // Make Columns
+                    line +=board.GetTile(i, j).GetState()
+                        ? "[red]■[/] "
+                        : "[green]□[/] ";
                 }
-
-                table.AddRow(row.ToArray());
+                // Show Board (per Line)
+                AnsiConsole.MarkupLine(line);
             }
-            // Show Board
-            AnsiConsole.Write(table);
         }
         /// <summary>
         /// Shows the game menu
@@ -145,6 +145,25 @@ namespace BlockoutProject_G07
             // Showing what was chosen
             AnsiConsole.MarkupLine( $"\nOption chosen: [yellow]{difficulty}[/]");
             return difficulty;
+        }
+        /// <summary>
+        /// Congratulates the user on winning and asks if he wants to continue playing
+        /// </summary>
+        /// <returns> If the user wants to start again or not </returns>
+        public bool GameWinMessage()
+        {
+            AnsiConsole.MarkupLine("\n[yellow]Congratulations! You Won![/]\n");
+            // Asks to continue playing
+            var confirmed = AnsiConsole.Confirm("\nDo you wish to continue playing?");
+            // Returns users response
+            if (confirmed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

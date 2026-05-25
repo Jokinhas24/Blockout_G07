@@ -10,12 +10,12 @@ namespace BlockoutProject_G07
         //Defining Tile state (ON or OFF)
         public bool State {get; private set;}
         /// <summary>
-        /// Tile's constructor
+        /// Tile's constructor setting default state
         /// </summary>
-        /// <param name="state"> Tile's state (ON = true or OFF = false) </param>
-        public Tile(bool state)
+        public Tile()
         {
-            State = state;
+            // Default state (OFF = false)
+            State = false;
         }
         /// <summary>
         /// Returns the Tile's state

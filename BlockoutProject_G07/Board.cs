@@ -8,16 +8,26 @@ namespace BlockoutProject_G07
     public class Board
     {
         // Defining board's variables
-        public Tile[,] board;
-        public int Size => board.GetLength(0);
+        public Tile[,] tiles;
+        public int Size {get;}
         /// <summary>
         /// Board's constructor
         /// </summary>
         /// <param name="difficulty"> Difficulty, which defines board's size (int x int) </param>
         public Board (Difficulty difficulty)
         {
-            int size = (int)difficulty;
-            board = new Tile[size, size];
+            // Turning difficulty into size
+            Size = (int)difficulty;
+            // Creating tiles
+            tiles = new Tile[Size, Size];
+
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    tiles[i, j] = new Tile(); // Default state
+                }   
+        }
         }
         /// <summary>
         /// Returns Tile's position based on coordinates
@@ -27,7 +37,7 @@ namespace BlockoutProject_G07
         /// <returns></returns>
         public Tile GetTile(int row, int column)
         {
-            return board[row, column];
+            return tiles[row, column];
         }
         /// <summary>
         /// Check if the coordinates given are valid

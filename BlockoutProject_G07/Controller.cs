@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
@@ -8,18 +9,20 @@ namespace BlockoutProject_G07
 {
     public class Controller
     {
+        // Keep the difficulty here so it can be changed later set to Easy (Default)
+        private Difficulty difficulty = Difficulty.Easy;
         // The board (part of the Model)
-        private readonly Board board;
+        private Board board;
         // stating the variable of the game state
         private bool gameWon;
         /// <summary>
         /// Controller's constructor
         /// </summary>
         /// <param name="board"> Current Board </param>
-        public Controller(Board board)
+        public Controller()
         {
-            // Keep the board (part of the model)
-            this.board = board;
+            // Create the board (part of the model)
+            this.board = new Board (difficulty);
         }
         /// <summary>
         /// Starts the main menu loop
@@ -32,10 +35,26 @@ namespace BlockoutProject_G07
 
             // We keep the user's option here
             string option;
+            GameResult result = GameResult.Continue;
+            difficulty = Difficulty.Easy;
 
             // Main menu loop
-            do
+            while (true)
             {
+                // If the player choose to end, end app
+                if (result == GameResult.Exit)
+                { 
+                    view.ExitMessage();
+                    break;
+                }
+                // If the player choose to restart, show menu
+                if (result == GameResult.Restart)
+                {
+                    CreateBoard();
+                    result = GameResult.Continue;
+                    continue;
+                }
+
                 // Show menu and get user option
                 option = view.ShowMenu();
 
@@ -43,17 +62,17 @@ namespace BlockoutProject_G07
                 switch (option)
                 {
                     case "Play":
-                        StartGame(view, board);
+                        result = StartGame(view);
                         break;
                     case "Difficulty":
-                        ChangeDifficulty(view, board);
+                        ChangeDifficulty(view);
                         break;
                     case "Tutorial":
                         view.ShowTutorial();
                         break;
                     case "Quit":
                         view.ExitMessage();
-                        break;
+                        return;
                     default:
                         view.ErrorMessage("Unknown option!");
                         break;
@@ -64,72 +83,88 @@ namespace BlockoutProject_G07
                 {
                     view.WaitUser();
                 }
-
                 // Loop keeps going until players choses to starts the game or quit
-            } while (option != "Play" && option != "Quit");
+            }
         }
         /// <summary>
         /// Game's main loop
         /// </summary>
         /// <param name="view"> Current view </param>
-        /// <param name="board"> Current board </param>
-        public void StartGame(IView view, Board board)
+        public GameResult StartGame(IView view)
         {
             // Game's variables
             gameWon = false;
             string option;
 
             // Main game loop
-            do
+            while (true)
             {
                 // Show board before asking inputs
-                // view.ShowBoard(board);
+                view.ShowBoard(board);
 
-                // Shows game menu
-                option = view.ShowGameMenu();
+                // Checks board before asking for input
+                CheckBoardWon();
 
-                // Determine the option specified by the user and act on it
-                switch (option)
+                // If Game is won show winning message and
+                // send the user back to main menu or end the app
+                // while continuing if the game is not won nor quitted
+                if (gameWon)
                 {
-                    case "Coordinates":
-                        // Ask coordinates
-                        (int row, int column) coordinates = view.AskCoordinates(board);
-                        // Toggle tiles
-                        ToggleTiles(board, coordinates.Item1, coordinates.Item2);
-                        break;
-                    case "Tutorial":
-                        view.ShowTutorial();
-                        break;
-                    case "Quit":
-                        view.ExitMessage();
-                        break;
-                    default:
-                        view.ErrorMessage("Unknown option!");
-                        break;
+                    return view.GameWinMessage() ? GameResult.Restart : GameResult.Exit;
                 }
-
-                // Wait for user to press a key...  
-                if (option != "Quit")
+                else // Play the game while game isn't won
                 {
-                    view.WaitUser();
-                }
+                    // Shows game menu
+                    option = view.ShowGameMenu();
+                    Console.WriteLine(board.Size);
 
-                // Loop keeps going game is won, or player decides to quit
-            } while (!gameWon && option != "Quit");
+                    // Determine the option specified by the user and act on it
+                    switch (option)
+                    {
+                        case "Coordinates":
+                            // Ask coordinates
+                            (int row, int column) coordinates = view.AskCoordinates(board);
+                            // Toggle tiles
+                            ToggleTiles(board, coordinates.Item1, coordinates.Item2);
+                            break;
+                        case "Tutorial":
+                            view.ShowTutorial();
+                            break;
+                        case "Quit":
+                            view.ExitMessage();
+                            return GameResult.Exit;
+                        default:
+                            view.ErrorMessage("Unknown option!");
+                            break;
+                    }
+                    // Wait for user to press a key...  
+                    if (option != "Quit")
+                    {
+                        view.WaitUser();
+                    }
+                } // Loop keeps going game is won, or player decides to quit
+            }
         }
-        public void ChangeDifficulty(IView view, Board board)
+        /// <summary>
+        /// Changes the difficulty of the game, meaning the size of the board
+        /// </summary>
+        /// <param name="view"> Current View</param>
+        public void ChangeDifficulty(IView view)
         {
             string option = view.ShowDifficultyMenu();
             switch (option)
                 {
                     case "Easy":
-                        Program.difficulty = Difficulty.Easy;
+                        difficulty = Difficulty.Easy;
+                        CreateBoard();
                         break;
                     case "Medium":
-                        Program.difficulty = Difficulty.Medium;
+                        difficulty = Difficulty.Medium;
+                        CreateBoard();
                         break;
                     case "Hard":
-                        Program.difficulty = Difficulty.Hard;
+                        difficulty = Difficulty.Hard;
+                        CreateBoard();
                         break;
                     default:
                         view.ErrorMessage("Invalid Difficulty!");
@@ -140,8 +175,7 @@ namespace BlockoutProject_G07
         /// <summary>
         /// Checks if the board is clear and changes game state to "Won" = true
         /// </summary>
-        /// <param name="board"> Board to check </param>
-        public void CheckBoardWon(Board board)
+        public void CheckBoardWon()
         {
             //Number of tiles cleared
             int n = 0;
@@ -164,9 +198,7 @@ namespace BlockoutProject_G07
         }
         public void ToggleTiles(Board board, int row, int column)
         {
-            // Toggle the chosen tile
-            board.GetTile(row, column).ToggleState();
-            // Toggle adjacent tiles
+            // Toggle chosen and adjacent tiles
             for (int i = row - 1; i <= row + 1; i++)
             {
                 for (int j = column - 1; j <= column + 1; j++)
@@ -177,6 +209,10 @@ namespace BlockoutProject_G07
                     }
                 }
             }
+        }
+        public void CreateBoard()
+        {
+            board = new Board(difficulty);
         }
     }
 }
