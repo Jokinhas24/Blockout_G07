@@ -1,4 +1,4 @@
-# Yet Another Dungeon Crawler
+# Blockout Project Group 07
 
 ### **Authors:**
 
@@ -9,4 +9,41 @@
 
 **João Nogueira:**
  - Everything
+---
+
+**Git Repository:** [GitHub]
+(https://github.com/Jokinhas24/Blockout_G07)
+
+---
+## **Solution Architecture:**
+
+**Program.cs:**
+- Instantiates a new view and a controller, starting the game;
+
+**Controller.cs:**
+
+#### **Model Classes:**
+
+#### **View:**
+
+- **IView.cs:**
+  - Interface implemented by View.
+
+- **View.cs:**
+  - Implements IView.
+  - Passes in data from *Controller* and prints text to Console.
+
+---
+
+### **Class Diagram:**
+
+```mermaid
+
+classDiagram
+
+```
+
+### **References:**
+
+ - [Mermaid] https://mermaid.js.org/syntax/classDiagram.html 
 ---
