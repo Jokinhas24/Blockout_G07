@@ -6,6 +6,9 @@ using Spectre.Console;
 
 namespace BlockoutProject_G07
 {
+    /// <summary>
+    /// View using the Spectre Console
+    /// </summary>
     public class SpectreView : IView
     {
         /// <summary>
@@ -75,15 +78,15 @@ namespace BlockoutProject_G07
             //Space
             AnsiConsole.MarkupLine("");
 
-            // Make Board
+            // Make Row
             for(int i = 0; i < board.Size; i++)
             {
-                // Make Rows
                 string line = " ";
 
+                // Make Columns
                 for(int j = 0; j < board.Size; j++)
                 {
-                    // Make Columns
+                    // Make Board with symbols, fill for ON and empty for OFF
                     line +=board.GetTile(i, j).GetState()
                         ? "[red]■[/] "
                         : "[green]□[/] ";
@@ -95,6 +98,7 @@ namespace BlockoutProject_G07
         /// <summary>
         /// Shows the game menu
         /// </summary>
+        /// <returns> User's chosen option </returns>
         public string ShowGameMenu()
         {
             // Title
@@ -119,7 +123,7 @@ namespace BlockoutProject_G07
             // Get user coordinates while not having valid coordinates
             do
             {
-                // If row or column is wrong remind the board size
+                // If row or column is wrong reminds the board size
                 row = -1 + AnsiConsole.Prompt(
                     new TextPrompt<int>($"Choose a Row:")
                         .ValidationErrorMessage($"[orange]Must be a number between 1 and {board.Size}![/]"));
@@ -159,7 +163,7 @@ namespace BlockoutProject_G07
             ));
             // Defining default color
             Color color = Color.White;
-            // Changing color acordandly with the difficulty
+            // Changing color accordingly with the difficulty
             if (difficulty == "Easy") {color = Color.Green;}
             else if (difficulty == "Medium") {color = Color.Yellow;}
             else if (difficulty == "Hard") {color = Color.Red;}
@@ -171,21 +175,18 @@ namespace BlockoutProject_G07
         /// <summary>
         /// Congratulates the user on winning and asks if he wants to continue playing
         /// </summary>
-        /// <returns> If the user wants to start again or not </returns>
+        /// <returns> Bool saying if the user wants to start again or not </returns>
         public bool GameWinMessage()
         {
+            // Congrats message
             AnsiConsole.MarkupLine("\n[yellow]Congratulations! You Won![/]\n");
+
             // Asks to continue playing
             var confirmed = AnsiConsole.Confirm("\nDo you wish to continue playing?");
+
             // Returns users response
-            if (confirmed)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            if (confirmed) { return true; }
+            else { return false; }
         }
     }
 }

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace BlockoutProject_G07
 {
+    /// <summary>
+    /// Tiles are coordinates on a board that can have 2 states (ON and OFF)
+    /// </summary>
     public class Tile
     {
         //Defining Tile state (ON or OFF)

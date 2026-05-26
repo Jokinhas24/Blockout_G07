@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace BlockoutProject_G07
 {
+    /// <summary>
+    /// Board is an array of tiles that represents the game
+    /// </summary>
     public class Board
     {
-        // Defining board's variables
+        // Defining board's variables, tiles and size
         public Tile[,] tiles;
         public int Size {get;}
         /// <summary>
@@ -18,9 +21,11 @@ namespace BlockoutProject_G07
         {
             // Turning difficulty into size
             Size = (int)difficulty;
+
             // Creating tiles
             tiles = new Tile[Size, Size];
 
+            // Creating a board with tiles OFF (false)
             for (int i = 0; i < Size; i++)
             {
                 for (int j = 0; j < Size; j++)
@@ -34,7 +39,7 @@ namespace BlockoutProject_G07
         /// </summary>
         /// <param name="row"> Tile's row </param>
         /// <param name="column"> Tile's Column </param>
-        /// <returns></returns>
+        /// <returns> The tile </returns>
         public Tile GetTile(int row, int column)
         {
             return tiles[row, column];
@@ -44,7 +49,7 @@ namespace BlockoutProject_G07
         /// </summary>
         /// <param name="row"> Coordinate's row </param>
         /// <param name="column"> Coordinate's column </param>
-        /// <returns></returns>
+        /// <returns> Bool saying if it exists (or not) in the this board </returns>
         public bool IsValidCoord(int row, int column)
         {
             return row >= 0 && row < Size && column >= 0 && column < Size;

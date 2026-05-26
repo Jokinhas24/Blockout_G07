@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace BlockoutProject_G07
 {
+    /// <summary>
+    /// Interface of views to handle the game
+    /// </summary>
     public interface IView
     {
         string ShowMenu();

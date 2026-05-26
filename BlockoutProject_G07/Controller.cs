@@ -11,20 +11,19 @@ namespace BlockoutProject_G07
 {
     public class Controller
     {
-        // Keep the difficulty here so it can be changed later set to Easy (Default)
+        // Keep the difficulty here so it can be changed later, set to Easy (Default)
         private Difficulty difficulty = Difficulty.Easy;
         // The board (part of the Model)
         private Board board;
-        // stating the variable of the game state
+        // stating the variable of the game state (Won or not)
         private bool gameWon;
         /// <summary>
         /// Controller's constructor
         /// </summary>
-        /// <param name="board"> Current Board </param>
         public Controller()
         {
             // Create the board (part of the model)
-            this.board = new Board (difficulty);
+            board = new Board (difficulty);
         }
         /// <summary>
         /// Starts the main menu loop
@@ -37,19 +36,19 @@ namespace BlockoutProject_G07
 
             // We keep the user's option here
             string option;
+            // Game result set to continue, so it continues this loop
             GameResult result = GameResult.Continue;
-            difficulty = Difficulty.Easy;
 
-            // Main menu loop
+            // Main menu loop (Loop keeps going until players choses quit)
             while (true)
             {
-                // If the player choose to end, end app
+                // If the player choose to end after winning, end app
                 if (result == GameResult.Exit)
                 { 
                     view.ExitMessage();
                     break;
                 }
-                // If the player choose to restart, show menu
+                // If the player choose to restart after winning, show menu again
                 if (result == GameResult.Restart)
                 {
                     CreateBoard();
@@ -73,6 +72,7 @@ namespace BlockoutProject_G07
                         view.ShowTutorial();
                         break;
                     case "Quit":
+                        // return so it's stops the loop
                         view.ExitMessage();
                         return;
                     default:
@@ -85,7 +85,6 @@ namespace BlockoutProject_G07
                 {
                     view.WaitUser();
                 }
-                // Loop keeps going until players choses to starts the game or quit
             }
         }
         /// <summary>
@@ -94,30 +93,27 @@ namespace BlockoutProject_G07
         /// <param name="view"> Current view </param>
         public GameResult StartGame(IView view)
         {
-            // Game's variables
+            // Game's variables (set game state to false)
             gameWon = false;
             string option;
 
-            // Shuffles board before anything
+            // Shuffles board before anything (outside loop)
             ShuffleBoard();
 
             // Main game loop
             while (true)
             {
-                // Show board before asking inputs
+                // Show and checks board before asking input
                 view.ShowBoard(board);
-
-                // Checks board before asking for input
                 CheckBoardWon();
 
                 // If Game is won show winning message and
                 // send the user back to main menu or end the app
-                // while continuing if the game is not won nor quitted
                 if (gameWon)
                 {
                     return view.GameWinMessage() ? GameResult.Restart : GameResult.Exit;
                 }
-                else // Play the game while game isn't won
+                else // Continuing while the game is not won nor quitted
                 {
                     // Shows game menu
                     option = view.ShowGameMenu();
@@ -129,7 +125,7 @@ namespace BlockoutProject_G07
                             // Ask coordinates
                             (int row, int column) coordinates = view.AskCoordinates(board);
                             // Toggle tiles
-                            ToggleTiles(board, coordinates.row, coordinates.column);
+                            ToggleTiles(coordinates.row, coordinates.column);
                             break;
                         case "Tutorial":
                             view.ShowTutorial();
@@ -146,13 +142,13 @@ namespace BlockoutProject_G07
                     {
                         view.WaitUser();
                     }
-                } // Loop keeps going game is won, or player decides to quit
+                }
             }
         }
         /// <summary>
-        /// Changes the difficulty of the game, meaning the size of the board
+        /// Changes the difficulty of the game, changing the size of the board
         /// </summary>
-        /// <param name="view"> Current View</param>
+        /// <param name="view"> Current View </param>
         public void ChangeDifficulty(IView view)
         {
             string option = view.ShowDifficultyMenu();
@@ -183,7 +179,7 @@ namespace BlockoutProject_G07
         {
             //Number of tiles cleared
             int n = 0;
-            //Checks all tiles and adds to tiles cleared
+            //Checks all tiles and adds to tiles cleared (if cleared)
             for (int i = 0; i < board.Size; i++)
             {
                 for (int j = 0; j < board.Size; j++)
@@ -194,31 +190,43 @@ namespace BlockoutProject_G07
                     }
                 }
             }
-            //Changes game state "Won" to true when all Tiles are cleared
+            //Changes game state "Won" to true when all Tiles (size x size) are cleared
             if (n == board.Size * board.Size)
             {
                 gameWon = true;
             }
         }
-        public void ToggleTiles(Board board, int row, int column)
+        /// <summary>
+        /// Toggles the center tiles and all adjacent to it (in a cross '+')
+        /// </summary>
+        /// <param name="row"> Center tile's row </param>
+        /// <param name="column"> Center tile's column </param>
+        public void ToggleTiles(int row, int column)
         {
             // Toggle chosen
             board.GetTile(row, column).ToggleState();
-            // Toggle adjacent tiles (if valid)
+            // Toggle adjacent tiles (if valid, important because they could be inexistent)
             if (board.IsValidCoord(row - 1, column)) {board.GetTile(row - 1, column).ToggleState();}
             if (board.IsValidCoord(row + 1, column)) {board.GetTile(row + 1, column).ToggleState();}
             if (board.IsValidCoord(row, column - 1)) {board.GetTile(row, column - 1).ToggleState();}
             if (board.IsValidCoord(row, column + 1)) {board.GetTile(row, column + 1).ToggleState();}
         }
+        /// <summary>
+        /// Creates a new board with the current difficulty (done because board is created too many times)
+        /// </summary>
         public void CreateBoard()
         {
             board = new Board(difficulty);
         }
+        /// <summary>
+        /// Turns ON 1 * Size of the board to start the game
+        /// </summary>
         public void ShuffleBoard()
         {
+            // Creates a new seed
             Random random = new Random();
 
-            // Variable of the amount of toggles
+            // Variable of the max amount of toggles
             int count = 0;
 
             while (count < board.Size)
@@ -230,6 +238,7 @@ namespace BlockoutProject_G07
                 // Check if the tile is already toggled (already true)
                 if (!board.GetTile(row, column).GetState())
                 {
+                    // Toggles the tile then add to the max amount of toggles possible
                     board.GetTile(row, column).ToggleState();
                     count++;
                 }
