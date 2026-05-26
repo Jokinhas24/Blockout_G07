@@ -91,7 +91,7 @@ namespace BlockoutProject_G07
         /// Game's main loop
         /// </summary>
         /// <param name="view"> Current view </param>
-        public GameResult StartGame(IView view)
+        private GameResult StartGame(IView view)
         {
             // Game's variables (set game state to false)
             gameWon = false;
@@ -149,7 +149,7 @@ namespace BlockoutProject_G07
         /// Changes the difficulty of the game, changing the size of the board
         /// </summary>
         /// <param name="view"> Current View </param>
-        public void ChangeDifficulty(IView view)
+        private void ChangeDifficulty(IView view)
         {
             string option = view.ShowDifficultyMenu();
             switch (option)
@@ -175,7 +175,7 @@ namespace BlockoutProject_G07
         /// <summary>
         /// Checks if the board is clear and changes game state to "Won" = true
         /// </summary>
-        public void CheckBoardWon()
+        private void CheckBoardWon()
         {
             //Number of tiles cleared
             int n = 0;
@@ -201,7 +201,7 @@ namespace BlockoutProject_G07
         /// </summary>
         /// <param name="row"> Center tile's row </param>
         /// <param name="column"> Center tile's column </param>
-        public void ToggleTiles(int row, int column)
+        private void ToggleTiles(int row, int column)
         {
             // Toggle chosen
             board.GetTile(row, column).ToggleState();
@@ -214,14 +214,14 @@ namespace BlockoutProject_G07
         /// <summary>
         /// Creates a new board with the current difficulty (done because board is created too many times)
         /// </summary>
-        public void CreateBoard()
+        private void CreateBoard()
         {
             board = new Board(difficulty);
         }
         /// <summary>
         /// Turns ON 1 * Size of the board to start the game
         /// </summary>
-        public void ShuffleBoard()
+        private void ShuffleBoard()
         {
             // Creates a new seed
             Random random = new Random();

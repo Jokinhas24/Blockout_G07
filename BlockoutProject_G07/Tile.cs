@@ -11,14 +11,14 @@ namespace BlockoutProject_G07
     public class Tile
     {
         //Defining Tile state (ON or OFF)
-        public bool State {get; private set;}
+        private bool State {get; set;}
         /// <summary>
         /// Tile's constructor setting default state
         /// </summary>
         public Tile()
         {
             // Default state (OFF = false)
-            State = false;
+            State = default;
         }
         /// <summary>
         /// Returns the Tile's state
