@@ -33,12 +33,10 @@ namespace BlockoutProject_G07
         {
             // Greet user
             view.WelcomeMessage();
-
             // We keep the user's option here
             string option;
             // Game result set to continue, so it continues this loop
             GameResult result = GameResult.Continue;
-
             // Main menu loop (Loop keeps going until players choses quit)
             while (true)
             {
@@ -55,10 +53,8 @@ namespace BlockoutProject_G07
                     result = GameResult.Continue;
                     continue;
                 }
-
                 // Show menu and get user option
                 option = view.ShowMenu();
-
                 // Determine the option specified by the user and act on it
                 switch (option)
                 {
@@ -79,7 +75,6 @@ namespace BlockoutProject_G07
                         view.ErrorMessage("Unknown option!");
                         break;
                 }
-
                 // Wait for user to press a key...  
                 if (option != "Play" && option != "Quit")
                 {
@@ -96,17 +91,14 @@ namespace BlockoutProject_G07
             // Game's variables (set game state to false)
             gameWon = false;
             string option;
-
             // Shuffles board before anything (outside loop)
             ShuffleBoard();
-
             // Main game loop
             while (true)
             {
                 // Show and checks board before asking input
                 view.ShowBoard(board);
                 CheckBoardWon();
-
                 // If Game is won show winning message and
                 // send the user back to main menu or end the app
                 if (gameWon)
@@ -117,7 +109,6 @@ namespace BlockoutProject_G07
                 {
                     // Shows game menu
                     option = view.ShowGameMenu();
-
                     // Determine the option specified by the user and act on it
                     switch (option)
                     {
@@ -225,10 +216,8 @@ namespace BlockoutProject_G07
         {
             // Creates a new seed
             Random random = new Random();
-
             // Variable of the max amount of toggles
             int count = 0;
-
             while (count < board.Size)
             {
                 // Get random coordinates

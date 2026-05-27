@@ -21,10 +21,8 @@ namespace BlockoutProject_G07
         {
             // Turning difficulty into size
             Size = (int)difficulty;
-
             // Creating tiles
             tiles = new Tile[Size, Size];
-
             // Creating a board with tiles OFF (false)
             for (int i = 0; i < Size; i++)
             {
