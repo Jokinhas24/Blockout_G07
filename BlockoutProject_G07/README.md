@@ -83,7 +83,7 @@ Git Repository: [GitHub] (https://github.com/Jokinhas24/Blockout_G07.git)
   - Implements IView interface.
   - Handles all user interaction and console outputs.
   - Displays menus, messages and the game board.
-  - Collects user input and sends it to the *Controller*
+  - Collects user input and sends it to the *Controller*.
 
 ---
 
@@ -176,4 +176,18 @@ class SpectreView {
 
 ### **References:**
 
- - [Mermaid] https://mermaid.js.org/syntax/classDiagram.html 
+ - [Mermaid] https://mermaid.js.org/syntax/classDiagram.html
+ - [SpectreConsole] https://spectreconsole.net
+
+---
+
+ ### **AI Usage (ChatGPT):**
+
+- Clarification of C# programming concepts and syntax, such as:
+  - Loops and game loop logic.
+  - Tuples and return values.
+  - Enums.
+  - ternary operators ( ? : ).
+- Debugging and error diagnosis in game flow and board coordinate handling.
+- Explanations regarding object-oriented programming and UML/Mermaid class diagrams.
+- Consultation of technical information related to C#, Spectre.Console and Markdown.
