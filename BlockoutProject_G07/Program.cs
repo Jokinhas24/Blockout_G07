@@ -12,10 +12,8 @@ namespace BlockoutProject_G07
         {
             // Instantiate View
             IView view = new SpectreView();
-
             // Instantiate Controller
             Controller controller = new Controller();
-
             // Start the program instance
             controller.Run(view);
         }

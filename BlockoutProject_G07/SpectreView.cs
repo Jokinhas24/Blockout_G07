@@ -77,12 +77,10 @@ namespace BlockoutProject_G07
         {   
             //Space
             AnsiConsole.MarkupLine("");
-
             // Make Row
             for(int i = 0; i < board.Size; i++)
             {
                 string line = " ";
-
                 // Make Columns
                 for(int j = 0; j < board.Size; j++)
                 {
@@ -136,7 +134,6 @@ namespace BlockoutProject_G07
                     ErrorMessage("Invalid Coordinate!");
                 }
             } while (!board.IsValidCoord(row, column));
-
             return (row, column);
         }
         /// <summary>
@@ -167,7 +164,6 @@ namespace BlockoutProject_G07
             if (difficulty == "Easy") {color = Color.Green;}
             else if (difficulty == "Medium") {color = Color.Yellow;}
             else if (difficulty == "Hard") {color = Color.Red;}
-
             // Showing what was chosen
             AnsiConsole.MarkupLine( $"\nOption chosen: [{color}]{difficulty}[/]");
             return difficulty;
@@ -180,10 +176,8 @@ namespace BlockoutProject_G07
         {
             // Congrats message
             AnsiConsole.MarkupLine("\n[yellow]Congratulations! You Won![/]\n");
-
             // Asks to continue playing
             var confirmed = AnsiConsole.Confirm("\nDo you wish to continue playing?");
-
             // Returns users response
             if (confirmed) { return true; }
             else { return false; }
