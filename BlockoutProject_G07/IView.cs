@@ -17,9 +17,9 @@ namespace BlockoutProject_G07
         void WaitUser();
         void ShowTutorial();
         void ShowBoard(Board board);
-        string ShowGameMenu();
+        string ShowGameMenu(Difficulty difficulty, int moves);
         (int, int) AskCoordinates(Board board);
         string ShowDifficultyMenu();
-        bool GameWinMessage();
+        bool GameWinMessage(int moves);
     }
 }

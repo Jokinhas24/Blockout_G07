@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -15,8 +16,10 @@ namespace BlockoutProject_G07
         private Difficulty difficulty = Difficulty.Easy;
         // The board (part of the Model)
         private Board board;
-        // stating the variable of the game state (Won or not)
+        // Stating the variable of the game state (Won or not)
         private bool gameWon;
+        // Current highScore
+        private int highScore;
         /// <summary>
         /// Controller's constructor
         /// </summary>
@@ -91,8 +94,16 @@ namespace BlockoutProject_G07
             // Game's variables (set game state to false)
             gameWon = false;
             string option;
+            // Variable of the amount of moves performed
+            int moves = 0;
             // Shuffles board before anything (outside loop)
             ShuffleBoard();
+            // Gets current highScore with the chosen difficulty before starting the game
+            try
+            {
+                highScore = GetHighScore(difficulty);
+            } catch {highScore = 0;}
+
             // Main game loop
             while (true)
             {
@@ -103,12 +114,14 @@ namespace BlockoutProject_G07
                 // send the user back to main menu or end the app
                 if (gameWon)
                 {
-                    return view.GameWinMessage() ? GameResult.Restart : GameResult.Exit;
+                    // Saves highScore in file before doing anything else
+                    SaveHighScore(difficulty, moves);
+                    return view.GameWinMessage(moves) ? GameResult.Restart : GameResult.Exit;
                 }
                 else // Continuing while the game is not won nor quitted
                 {
                     // Shows game menu
-                    option = view.ShowGameMenu();
+                    option = view.ShowGameMenu(difficulty, highScore);
                     // Determine the option specified by the user and act on it
                     switch (option)
                     {
@@ -117,6 +130,8 @@ namespace BlockoutProject_G07
                             (int row, int column) coordinates = view.AskCoordinates(board);
                             // Toggle tiles
                             ToggleTiles(coordinates.row, coordinates.column);
+                            // Add moves
+                            moves++;
                             break;
                         case "Tutorial":
                             view.ShowTutorial();
@@ -196,11 +211,17 @@ namespace BlockoutProject_G07
         {
             // Toggle chosen
             board.GetTile(row, column).ToggleState();
-            // Toggle adjacent tiles (if valid, important because they could be inexistent)
+            // Toggle adjacent tiles and diagonals (if valid, important because they could be inexistent)
+            // 4 Directions
             if (board.IsValidCoord(row - 1, column)) {board.GetTile(row - 1, column).ToggleState();}
             if (board.IsValidCoord(row + 1, column)) {board.GetTile(row + 1, column).ToggleState();}
             if (board.IsValidCoord(row, column - 1)) {board.GetTile(row, column - 1).ToggleState();}
             if (board.IsValidCoord(row, column + 1)) {board.GetTile(row, column + 1).ToggleState();}
+            // 4 Diagonals
+            if (board.IsValidCoord(row - 1, column - 1)) {board.GetTile(row - 1, column - 1).ToggleState();}
+            if (board.IsValidCoord(row + 1, column - 1)) {board.GetTile(row + 1, column - 1).ToggleState();}
+            if (board.IsValidCoord(row - 1, column + 1)) {board.GetTile(row - 1, column + 1).ToggleState();}
+            if (board.IsValidCoord(row + 1, column + 1)) {board.GetTile(row + 1, column + 1).ToggleState();}
         }
         /// <summary>
         /// Creates a new board with the current difficulty (done because board is created too many times)
@@ -232,6 +253,41 @@ namespace BlockoutProject_G07
                     count++;
                 }
             }
+        }
+        /// <summary>
+        /// Saves the highScore in a file with he name of the difficulty
+        /// </summary>
+        /// <param name="difficulty"> Difficulty, which determines the name of the file </param>
+        /// <param name="moves"> HighScore (in moves)</param>
+        private void SaveHighScore(Difficulty difficulty, int moves)
+        {
+            File.AppendAllText($"{difficulty}.txt", $"{moves}");
+        }
+        /// <summary>
+        /// Opens a file and return the lowest amount of moves in a specific difficulty
+        /// </summary>
+        /// <param name="difficulty"> Difficulty wanted </param>
+        /// <returns> Lowest number of moves stored there </returns>
+        private int GetHighScore(Difficulty difficulty)
+        {
+            // Variable to use for fire reading
+            string s;
+            // Create new list to compare
+            List<int> scores = new List<int>();
+            // Open the file and create a reader
+            StreamReader sr = new StreamReader($"{difficulty}.txt");
+            // Read file
+            while ((s = sr.ReadLine()) != null)
+            {
+                // Add score to list while converting to int
+                scores.Add(int.Parse(s));
+            }
+            // Close file
+            sr.Close();
+            // Sort the score
+            scores.Sort();
+            // Return the higher score
+            return scores[0];
         }
     }
 }

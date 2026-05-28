@@ -94,13 +94,21 @@ namespace BlockoutProject_G07
             }
         }
         /// <summary>
-        /// Shows the game menu
+        /// Shows the game menu and highscore
         /// </summary>
         /// <returns> User's chosen option </returns>
-        public string ShowGameMenu()
+        public string ShowGameMenu(Difficulty difficulty, int moves)
         {
             // Title
             AnsiConsole.MarkupLine("\n[blue]In-Game Menu[/]");
+            // Defining default color
+            Color color = Color.White;
+            // Changing color accordingly with the difficulty
+            if (difficulty == Difficulty.Easy) {color = Color.Green;}
+            else if (difficulty == Difficulty.Medium) {color = Color.Yellow;}
+            else if (difficulty == Difficulty.Hard) {color = Color.Red;}
+            // Highscore
+            AnsiConsole.MarkupLine($"\nHighscore in [{color}]{difficulty}[/] difficulty: [yellow]{moves} moves.[/]");
             // Option menu
             var option = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
@@ -172,10 +180,12 @@ namespace BlockoutProject_G07
         /// Congratulates the user on winning and asks if he wants to continue playing
         /// </summary>
         /// <returns> Bool saying if the user wants to start again or not </returns>
-        public bool GameWinMessage()
+        public bool GameWinMessage(int moves)
         {
             // Congrats message
             AnsiConsole.MarkupLine("\n[yellow]Congratulations! You Won![/]\n");
+            // Telling how many moves the user used
+            AnsiConsole.MarkupLine($"Your score: [yellow]{moves} moves.[/]");
             // Asks to continue playing
             var confirmed = AnsiConsole.Confirm("\nDo you wish to continue playing?");
             // Returns users response
