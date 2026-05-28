@@ -15,7 +15,7 @@ namespace BlockoutProject_G07
         private Difficulty difficulty = Difficulty.Easy;
         // The board (part of the Model)
         private Board board;
-        // stating the variable of the game state (Won or not)
+        // Stating the variable of the game state (Won or not)
         private bool gameWon;
         /// <summary>
         /// Controller's constructor
@@ -91,6 +91,8 @@ namespace BlockoutProject_G07
             // Game's variables (set game state to false)
             gameWon = false;
             string option;
+            // Variable of the amount of moves performed
+            int moves = 0;
             // Shuffles board before anything (outside loop)
             ShuffleBoard();
             // Main game loop
@@ -103,12 +105,12 @@ namespace BlockoutProject_G07
                 // send the user back to main menu or end the app
                 if (gameWon)
                 {
-                    return view.GameWinMessage() ? GameResult.Restart : GameResult.Exit;
+                    return view.GameWinMessage(moves) ? GameResult.Restart : GameResult.Exit;
                 }
                 else // Continuing while the game is not won nor quitted
                 {
                     // Shows game menu
-                    option = view.ShowGameMenu();
+                    option = view.ShowGameMenu(difficulty, moves);
                     // Determine the option specified by the user and act on it
                     switch (option)
                     {
@@ -117,6 +119,8 @@ namespace BlockoutProject_G07
                             (int row, int column) coordinates = view.AskCoordinates(board);
                             // Toggle tiles
                             ToggleTiles(coordinates.row, coordinates.column);
+                            // Add moves
+                            moves++;
                             break;
                         case "Tutorial":
                             view.ShowTutorial();
