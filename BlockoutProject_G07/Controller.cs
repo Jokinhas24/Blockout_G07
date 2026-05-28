@@ -196,11 +196,17 @@ namespace BlockoutProject_G07
         {
             // Toggle chosen
             board.GetTile(row, column).ToggleState();
-            // Toggle adjacent tiles (if valid, important because they could be inexistent)
+            // Toggle adjacent tiles and diagonals (if valid, important because they could be inexistent)
+            // 4 Directions
             if (board.IsValidCoord(row - 1, column)) {board.GetTile(row - 1, column).ToggleState();}
             if (board.IsValidCoord(row + 1, column)) {board.GetTile(row + 1, column).ToggleState();}
             if (board.IsValidCoord(row, column - 1)) {board.GetTile(row, column - 1).ToggleState();}
             if (board.IsValidCoord(row, column + 1)) {board.GetTile(row, column + 1).ToggleState();}
+            // 4 Diagonals
+            if (board.IsValidCoord(row - 1, column - 1)) {board.GetTile(row - 1, column - 1).ToggleState();}
+            if (board.IsValidCoord(row + 1, column - 1)) {board.GetTile(row + 1, column - 1).ToggleState();}
+            if (board.IsValidCoord(row - 1, column + 1)) {board.GetTile(row - 1, column + 1).ToggleState();}
+            if (board.IsValidCoord(row + 1, column + 1)) {board.GetTile(row + 1, column + 1).ToggleState();}
         }
         /// <summary>
         /// Creates a new board with the current difficulty (done because board is created too many times)
