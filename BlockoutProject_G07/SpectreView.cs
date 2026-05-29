@@ -107,8 +107,8 @@ namespace BlockoutProject_G07
             if (difficulty == Difficulty.Easy) {color = Color.Green;}
             else if (difficulty == Difficulty.Medium) {color = Color.Yellow;}
             else if (difficulty == Difficulty.Hard) {color = Color.Red;}
-            // Highscore
-            AnsiConsole.MarkupLine($"\nHighscore in [{color}]{difficulty}[/] difficulty: [yellow]{moves} moves.[/]");
+            // HighScore 
+            AnsiConsole.MarkupLine($"Highscore in [{color}]{difficulty}[/] difficulty: [yellow]{moves} moves.[/]\n");
             // Option menu
             var option = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
